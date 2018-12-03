@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from django.db.models.signals import pre_save
+from django.utils.text import slugify
 
 
 def upload_location(instance, filename):
@@ -25,7 +27,22 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('posts:detail', kwargs={'id': self.id})
+        return reverse('posts:detail', kwargs={'slug': self.slug})
 
     class Meta:
         ordering = ['-id', '-timestamp', '-updated']
+
+
+def pre_save_post_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        # Create a slug with a incremental number suffixed
+        slug = slugify(instance.title)
+        new_slug = slug
+        x = 0
+        while Post.objects.filter(slug=new_slug).exists():
+            x = x + 1
+            new_slug = '{}-{}'.format(slug, x)
+        instance.slug = new_slug
+
+
+pre_save.connect(pre_save_post_receiver, sender=Post)

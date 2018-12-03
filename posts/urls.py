@@ -23,7 +23,7 @@ app_name = 'posts'
 urlpatterns = [
     path('', views.posts_list, name='list'),
     path('create/', views.posts_create, name='create'),
-    path('<int:id>/', views.posts_detail, name='detail'),
-    path('<int:id>/edit/', views.posts_update, name='update'),
-    path('<int:id>/delete/', views.posts_delete, name='delete'),
+    path('<slug:slug>/', views.posts_detail, name='detail'),
+    path('<slug:slug>/edit/', views.posts_update, name='update'),
+    path('<slug:slug>/delete/', views.posts_delete, name='delete'),
 ]
