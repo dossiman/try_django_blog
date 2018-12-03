@@ -1,0 +1,20 @@
+{% extends 'posts/base.html' %}
+
+{% block head_title %}
+  {{ title }} | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-sm-6 offset-sm-3">
+      {% if obj.image %}
+        <img src='{{ obj.image.url }}' class='img-fluid img-thumbnail' />
+      {% endif %}
+      <h1>{{ title }}
+        <small>{{ obj.timestamp }}</small>
+      </h1>
+
+      {{ obj.content|linebreaks }}
+    </div>
+  </div>
+{% endblock %}
